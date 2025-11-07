@@ -33,11 +33,11 @@ exports.getUserById = async (req, res) => {
 // ✅ Create new user
 exports.createUser = async (req, res) => {
   try {
-    const { username, password_hash, full_name, role, is_active } = req.body;
+    const { username, password, full_name, role, is_active } = req.body;
 
     const newUser = await User.create({
       username,
-      password_hash, // will be hashed by model hook
+      password, // will be hashed by model hook
       full_name,
       role: role || 'Billing',
       is_active: is_active !== undefined ? is_active : true,
@@ -57,14 +57,14 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, password_hash, full_name, role, is_active } = req.body;
+    const { username, password, full_name, role, is_active } = req.body;
 
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     await user.update({
       username,
-      password_hash, // automatically hashed if changed
+      password, // automatically hashed if changed
       full_name,
       role,
       is_active,

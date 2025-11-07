@@ -20,17 +20,33 @@ const salesitemRouter = require('./routes/SalesItemRoutes');
 const salesreturnitemRouter = require('./routes/SalesReturnItemRoutes');
 const DamagedStockRouter = require('./routes/DamagedStockRoutes');
 const ExcessStockRouter = require('./routes/ExcessStockRoutes');
+const authRouter = require('./routes/authRoutes');
+const helmet = require('helmet');
+const compression = require('compression');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const startCleanupJob = require('./utils/cleanupTokens');
 
 
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // your Next.js URL
+  credentials: true, // ✅ allow cookies
+}));
 app.use(express.json());
+app.use(helmet());
+app.use(compression());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(morgan('combined'));
 
 // Sync all models (creates table if not exists)
 sequelize.sync().then(() => {
   console.log('✅ All models synchronized');
+
+  startCleanupJob();
 });
 
 //routes
@@ -52,6 +68,7 @@ app.use('/api/sales_return',salesreturnRouter);
 app.use('/api/sales_return_item',salesreturnitemRouter)
 app.use('/api/damaged_stock',DamagedStockRouter)
 app.use('/api/Excess_Stock',ExcessStockRouter)
+app.use('/api/auth',authRouter)
 
 
 app.listen(process.env.PORT || 5000, () =>
