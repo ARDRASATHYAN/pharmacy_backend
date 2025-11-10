@@ -26,6 +26,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const startCleanupJob = require('./utils/cleanupTokens');
+const roleRouter = require('./routes/roleRoutes');
 
 
 
@@ -50,10 +51,10 @@ sequelize.sync().then(() => {
 });
 
 //routes
-app.use('/api/user', userRouter);
-app.use('/api/store', storeRouter);
-app.use('/api/hsn', hsnRouter);
-app.use('/api/drug_Schedule', drugScheduleRouter);
+app.use('/api/user', userRouter);//api correct
+app.use('/api/store', storeRouter);//correct
+app.use('/api/hsn', hsnRouter);//correct
+app.use('/api/drug_Schedule', drugScheduleRouter);//correct
 app.use('/api/items', itemsRouter);
 app.use('/api/supplier', supplierRouter);
 app.use('/api/customer', customerRouter);
@@ -69,6 +70,7 @@ app.use('/api/sales_return_item',salesreturnitemRouter)
 app.use('/api/damaged_stock',DamagedStockRouter)
 app.use('/api/Excess_Stock',ExcessStockRouter)
 app.use('/api/auth',authRouter)
+app.use('/api/role',roleRouter)
 
 
 app.listen(process.env.PORT || 5000, () =>

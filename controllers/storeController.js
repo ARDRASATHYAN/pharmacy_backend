@@ -16,19 +16,25 @@ exports.getAllStore = async (req, res) => {
 exports.getStoreById = async (req, res) => {
   try {
     const { id } = req.params;
-    const Store = await Store.findByPk(id);
-    if (!Store) return res.status(404).json({ message: 'Store not found' });
-    res.json(Store);
+
+    const Stores = await Store.findByPk(id);
+    if (!Stores) return res.status(404).json({ message: 'Store not found' });
+
+    res.json(Stores);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching Store by ID' });
   }
+
 };
+
+
+
 
 // ✅ Create a new Store record
 exports.createStore = async (req, res) => {
   try {
-    const { store_name, address, city, state, gst_no,phone ,email } = req.body;
-    const newStore = await Store.create({ store_name, address, city, state, gst_no,phone ,email });
+    const { store_name, address, city, state, gst_no, phone, email } = req.body;
+    const newStore = await Store.create({ store_name, address, city, state, gst_no, phone, email });
     res.status(201).json({ message: 'Store created successfully', data: newStore });
   } catch (error) {
     console.error('Error creating Store:', error);
@@ -40,13 +46,13 @@ exports.createStore = async (req, res) => {
 exports.updateStore = async (req, res) => {
   try {
     const { id } = req.params;
-    const {store_name, address, city, state, gst_no,phone ,email } = req.body;
+    const { store_name, address, city, state, gst_no, phone, email } = req.body;
 
-    const Store = await Store.findByPk(id);
-    if (!Store) return res.status(404).json({ message: 'Store not found' });
+    const store = await Store.findByPk(id);
+    if (!store) return res.status(404).json({ message: 'Store not found' });
 
-    await Store.update({ store_name, address, city, state, gst_no,phone ,email });
-    res.json({ message: 'Store updated successfully', data: Store });
+    await store.update({ store_name, address, city, state, gst_no, phone, email });
+    res.json({ message: 'Store updated successfully', data: store });
   } catch (error) {
     console.error('Error updating Store:', error);
     res.status(500).json({ message: 'Error updating Store' });
