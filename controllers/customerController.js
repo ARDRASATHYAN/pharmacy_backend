@@ -17,9 +17,9 @@ exports.getAllCustomer = async (req, res) => {
 exports.getCustomerById = async (req, res) => {
   try {
     const { id } = req.params;
-    const Customer = await Customer.findByPk(id);
-    if (!Customer) return res.status(404).json({ message: 'Customer not found' });
-    res.json(Customer);
+    const customer = await Customer.findByPk(id);
+    if (!customer) return res.status(404).json({ message: 'Customer not found' });
+    res.json(customer);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching Customer by ID' });
   }
@@ -43,11 +43,11 @@ exports.updateCustomer = async (req, res) => {
     const { id } = req.params;
     const {customer_name, address,gst_no,phone ,email,doctor_name,prescription_no } = req.body;
 
-    const Customer = await Customer.findByPk(id);
-    if (!Customer) return res.status(404).json({ message: 'Customer not found' });
+    const customer = await Customer.findByPk(id);
+    if (!customer) return res.status(404).json({ message: 'Customer not found' });
 
-    await Customer.update({ customer_name, address,gst_no,phone ,email,doctor_name,prescription_no });
-    res.json({ message: 'Customer updated successfully', data: Customer });
+    await customer.update({ customer_name, address,gst_no,phone ,email,doctor_name,prescription_no });
+    res.json({ message: 'Customer updated successfully', data: customer });
   } catch (error) {
     console.error('Error updating Customer:', error);
     res.status(500).json({ message: 'Error updating Customer' });
