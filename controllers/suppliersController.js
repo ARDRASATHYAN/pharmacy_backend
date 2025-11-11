@@ -17,9 +17,9 @@ exports.getAllSupplier = async (req, res) => {
 exports.getSupplierById = async (req, res) => {
   try {
     const { id } = req.params;
-    const Supplier = await Supplier.findByPk(id);
-    if (!Supplier) return res.status(404).json({ message: 'Supplier not found' });
-    res.json(Supplier);
+    const supplier = await Supplier.findByPk(id);
+    if (!supplier) return res.status(404).json({ message: 'Supplier not found' });
+    res.json(supplier);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching Supplier by ID' });
   }
@@ -29,7 +29,7 @@ exports.getSupplierById = async (req, res) => {
 exports.createSupplier = async (req, res) => {
   try {
     const { supplier_name, address, state, gst_no,phone ,email } = req.body;
-    const newSupplier = await Supplier.create({ supplier_name, address, city, state, gst_no,phone ,email });
+    const newSupplier = await Supplier.create({ supplier_name, address, state, gst_no,phone ,email });
     res.status(201).json({ message: 'Supplier created successfully', data: newSupplier });
   } catch (error) {
     console.error('Error creating Supplier:', error);
@@ -41,13 +41,13 @@ exports.createSupplier = async (req, res) => {
 exports.updateSupplier = async (req, res) => {
   try {
     const { id } = req.params;
-    const {supplier_name, address, city, state, gst_no,phone ,email } = req.body;
+    const {supplier_name, address, state, gst_no,phone ,email } = req.body;
 
-    const Supplier = await Supplier.findByPk(id);
-    if (!Supplier) return res.status(404).json({ message: 'Supplier not found' });
+    const supplier = await Supplier.findByPk(id);
+    if (!supplier) return res.status(404).json({ message: 'Supplier not found' });
 
-    await Supplier.update({ supplier_name, address, city, state, gst_no,phone ,email });
-    res.json({ message: 'Supplier updated successfully', data: Supplier });
+    await supplier.update({ supplier_name, address, state, gst_no,phone ,email });
+    res.json({ message: 'Supplier updated successfully', data: supplier });
   } catch (error) {
     console.error('Error updating Supplier:', error);
     res.status(500).json({ message: 'Error updating Supplier' });
