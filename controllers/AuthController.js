@@ -39,8 +39,8 @@ exports.login = async (req, res) => {
     // Set HttpOnly cookie
     res.cookie(COOKIE_NAME, refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: COOKIE_MAXAGE,
       path: '/',
     });
@@ -107,8 +107,8 @@ exports.refresh = async (req, res) => {
     // Set new cookie
     res.cookie(COOKIE_NAME, newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: COOKIE_MAXAGE,
       path: '/',
     });
@@ -133,7 +133,7 @@ exports.logout = async (req, res) => {
       }
     }
 
-    res.clearCookie(COOKIE_NAME, { path: '/api/auth/refresh' });
+    res.clearCookie(COOKIE_NAME, { path: '/' });
     res.json({ message: 'Logged out' });
 
   } catch (err) {

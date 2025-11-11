@@ -55,7 +55,7 @@ exports.getAllStocks = async (req, res) => {
         { model: Store, as: "store" },
         { model: Item, as: "item" },
       ],
-      order: [["created_at", "DESC"]],
+      order: [["stock_id", "ASC"]],
     });
 
     return res.status(200).json({
@@ -83,6 +83,7 @@ exports.getStockById = async (req, res) => {
         { model: Store, as: "store" },
         { model: Item, as: "item" },
       ],
+
     });
 
     if (!stock) {
