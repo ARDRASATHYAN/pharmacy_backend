@@ -58,9 +58,9 @@ app.use('/api/user', userRouter);//api correct
 app.use('/api/store', storeRouter);//correct
 app.use('/api/hsn', hsnRouter);//correct
 app.use('/api/drug_Schedule', drugScheduleRouter);//correct
-app.use('/api/items', itemsRouter);
-app.use('/api/supplier', supplierRouter);
-app.use('/api/customer', customerRouter);
+app.use('/api/items', itemsRouter);//correct
+app.use('/api/supplier', supplierRouter);//correct
+app.use('/api/customer', customerRouter);//correct
 app.use('/api/store_stock', storeStockRouter);
 app.use('/api/purchase_invoice', purchaseinvoiceRouter);
 app.use('/api/purchase_Items', purchaseItemsRouter);

@@ -14,6 +14,12 @@ const StoreStock = sequelize.define('StoreStock', {
      expiry_date: {
         type: DataTypes.DATE,
     },
+    batch_no: {
+      type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,  
+    
+    },
     mrp: {
         type: DataTypes.DECIMAL(10,2),
     },
