@@ -33,7 +33,10 @@ const roleRouter = require('./routes/roleRoutes');
 
 const app = express();
 app.use(cors({
-  origin:  ['https://pharmacy-pied-xi.vercel.app'], // your Next.js URL
+  origin:  [
+  "http://localhost:5173",                   // local dev
+  "https://pharmacy-pied-xi.vercel.app",     // live frontend
+], // your Next.js URL
   credentials: true, // ✅ allow cookies
 }));
 app.use(express.json());

@@ -40,9 +40,9 @@ exports.login = async (req, res) => {
     res.cookie(COOKIE_NAME, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
+      sameSite: 'none',
       maxAge: COOKIE_MAXAGE,
-      path: '/api/auth/refresh',
+      path: '/',
     });
 
     res.json({
@@ -108,9 +108,9 @@ exports.refresh = async (req, res) => {
     res.cookie(COOKIE_NAME, newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
+      sameSite: 'none',
       maxAge: COOKIE_MAXAGE,
-      path: '/api/auth/refresh',
+      path: '/',
     });
 
     res.json({ accessToken: newAccessToken });
