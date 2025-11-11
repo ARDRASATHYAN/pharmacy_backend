@@ -61,7 +61,7 @@ app.use('/api/drug_Schedule', drugScheduleRouter);//correct
 app.use('/api/items', itemsRouter);//correct
 app.use('/api/supplier', supplierRouter);//correct
 app.use('/api/customer', customerRouter);//correct
-app.use('/api/store_stock', storeStockRouter);
+app.use('/api/store_stock', storeStockRouter);//correct
 app.use('/api/purchase_invoice', purchaseinvoiceRouter);
 app.use('/api/purchase_Items', purchaseItemsRouter);
 app.use('/api/purchase_return',purchasereturnRouter);
