@@ -1,17 +1,56 @@
+const { Op } = require('sequelize');
 const User = require("../models/UserModel");
 
-
-// ✅ Get all users
+// ✅ Get all users with search, filter, and pagination
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll({
-      order: [['user_id', 'ASC']],
+    const {
+      search = '',        // for search (e.g., username, full_name)
+      role,               // filter by role
+      is_active,          // filter by status
+      sortBy = 'user_id', // sorting field
+      order = 'ASC'       // ASC / DESC
+    } = req.query;
+
+    const where = {};
+
+    // 🔍 Search (by username or full_name)
+    if (search) {
+      where[Op.or] = [
+        { username: { [Op.like]: `%${search}%` } },
+        { full_name: { [Op.like]: `%${search}%` } },
+      ];
+    }
+
+    // 🎯 Role filter
+    if (role) {
+      where.role = role;
+    }
+
+    // ✅ Active / Inactive filter
+    if (is_active !== undefined) {
+      if (is_active === 'true' || is_active === '1') where.is_active = true;
+      if (is_active === 'false' || is_active === '0') where.is_active = false;
+    }
+
+    // 🧮 Pagination
+    
+
+    const { rows: users, count: total } = await User.findAndCountAll({
+      where,
+      order: [[sortBy, order.toUpperCase()]],
       attributes: { exclude: ['password_hash'] },
     });
-    res.json(users);
+
+    res.json({
+      success: true,
+      data: users,
+     
+    });
+
   } catch (error) {
     console.error('Error fetching users:', error);
-    res.status(500).json({ message: 'Error fetching users' });
+    res.status(500).json({ success: false, message: 'Error fetching users' });
   }
 };
 
@@ -22,11 +61,11 @@ exports.getUserById = async (req, res) => {
     const user = await User.findByPk(id, {
       attributes: { exclude: ['password_hash'] },
     });
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    res.json({ success: true, data: user });
   } catch (error) {
     console.error('Error fetching user:', error);
-    res.status(500).json({ message: 'Error fetching user' });
+    res.status(500).json({ success: false, message: 'Error fetching user' });
   }
 };
 
@@ -44,12 +83,13 @@ exports.createUser = async (req, res) => {
     });
 
     res.status(201).json({
+      success: true,
       message: 'User created successfully',
       data: { ...newUser.toJSON(), password_hash: undefined },
     });
   } catch (error) {
     console.error('Error creating user:', error);
-    res.status(500).json({ message: 'Error creating user' });
+    res.status(500).json({ success: false, message: 'Error creating user' });
   }
 };
 
@@ -60,7 +100,7 @@ exports.updateUser = async (req, res) => {
     const { username, password, full_name, role, is_active } = req.body;
 
     const user = await User.findByPk(id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
     await user.update({
       username,
@@ -70,10 +110,10 @@ exports.updateUser = async (req, res) => {
       is_active,
     });
 
-    res.json({ message: 'User updated successfully' });
+    res.json({ success: true, message: 'User updated successfully' });
   } catch (error) {
     console.error('Error updating user:', error);
-    res.status(500).json({ message: 'Error updating user' });
+    res.status(500).json({ success: false, message: 'Error updating user' });
   }
 };
 
@@ -83,10 +123,12 @@ exports.deleteUser = async (req, res) => {
     const { id } = req.params;
     const deleted = await User.destroy({ where: { user_id: id } });
 
-    if (!deleted) return res.status(404).json({ message: 'User not found' });
-    res.json({ message: 'User deleted successfully' });
+    if (!deleted)
+      return res.status(404).json({ success: false, message: 'User not found' });
+
+    res.json({ success: true, message: 'User deleted successfully' });
   } catch (error) {
     console.error('Error deleting user:', error);
-    res.status(500).json({ message: 'Error deleting user' });
+    res.status(500).json({ success: false, message: 'Error deleting user' });
   }
 };
