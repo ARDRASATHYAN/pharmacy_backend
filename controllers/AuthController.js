@@ -142,6 +142,30 @@ exports.logout = async (req, res) => {
   }
 };
 
+
+// Get current logged-in user
+exports.getCurrentUser = async (req, res) => {
+  try {
+    if (!req.user || !req.user.user_id) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const user = await User.findByPk(req.user.user_id, {
+      attributes: { exclude: ["password_hash"] },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    res.status(500).json({ message: "Error fetching current user" });
+  }
+};
+
+
 // Optional: revoke all sessions for a user (admin or user action)
 // exports.revokeAll = async (req, res) => {
 //   try {

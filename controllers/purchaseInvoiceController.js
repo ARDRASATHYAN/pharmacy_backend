@@ -6,11 +6,23 @@ const User = require("../models/UserModel");
 // ✅ CREATE a new purchase invoice
 exports.createPurchaseInvoice = async (req, res) => {
   try {
-    const invoice = await PurchaseInvoice.create(req.body);
-    res.status(201).json({ message: 'Purchase invoice created successfully', data: invoice });
+    const { invoice_no, invoice_date, total_amount, total_discount, supplier_id, store_id,total_gst,net_amount } = req.body;
+
+    const newInvoice = await PurchaseInvoice.create({
+      invoice_no,
+      invoice_date,
+      total_amount,
+      total_discount,
+      supplier_id,
+      store_id,
+      total_gst,
+      net_amount,
+      created_by: req.user?.user_id || null, // ✅ include creator from logged-in user
+    });
+
+    res.status(201).json(newInvoice);
   } catch (error) {
-    console.error('Error creating purchase invoice:', error);
-    res.status(500).json({ message: 'Error creating purchase invoice', error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 

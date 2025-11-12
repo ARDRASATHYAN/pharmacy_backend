@@ -1,11 +1,12 @@
 const express = require('express');
 const { createPurchaseInvoice, getAllPurchaseInvoices, getPurchaseInvoiceById, updatePurchaseInvoice, deletePurchaseInvoice } = require('../controllers/purchaseInvoiceController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 
 const purchaseinvoiceRouter = express.Router();
 
 
-purchaseinvoiceRouter.post('/', createPurchaseInvoice);
+purchaseinvoiceRouter.post('/',authMiddleware, createPurchaseInvoice);
 purchaseinvoiceRouter.get('/', getAllPurchaseInvoices);
 purchaseinvoiceRouter.get('/:id', getPurchaseInvoiceById);
 purchaseinvoiceRouter.put('/:id', updatePurchaseInvoice);

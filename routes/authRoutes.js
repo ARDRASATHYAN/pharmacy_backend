@@ -5,7 +5,7 @@ const authRouter = express.Router();
 const rateLimit = require('express-rate-limit');
 
 const authMiddleware = require('../middleware/authMiddleware');
-const { login, refresh, logout } = require('../controllers/AuthController');
+const { login, refresh, logout, getCurrentUser } = require('../controllers/AuthController');
 
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10),
@@ -17,6 +17,7 @@ const limiter = rateLimit({
 authRouter.post('/login', limiter, login);
 authRouter.post('/refresh', limiter, refresh);
 authRouter.post('/logout',logout);
+authRouter.get('/profile', authMiddleware, getCurrentUser);
 // authRouter.post('/revoke-all',revokeAll); // protect with admin middleware if needed
 authRouter.get("/me", authMiddleware, (req, res) => {
   res.json({
