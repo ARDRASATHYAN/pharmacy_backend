@@ -27,6 +27,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const startCleanupJob = require('./utils/cleanupTokens');
 const roleRouter = require('./routes/roleRoutes');
+const purchaserouter = require('./routes/purchaseRoutes');
 
 
 
@@ -74,6 +75,7 @@ app.use('/api/damaged_stock',DamagedStockRouter)
 app.use('/api/Excess_Stock',ExcessStockRouter)
 app.use('/api/auth',authRouter)
 app.use('/api/role',roleRouter)
+app.use('/api/purchase',purchaserouter)
 
 
 app.listen(process.env.PORT || 5000, () =>
